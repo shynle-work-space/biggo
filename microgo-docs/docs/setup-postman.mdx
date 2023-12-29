@@ -1,0 +1,225 @@
+---
+sidebar_position: 2
+---
+
+# Setup Postman
+
+Download and import the following JSON to Postman to create a copy of the collection
+
+:::warning
+
+You may want to change the upload image from the `upload` routes
+
+:::
+
+```
+{
+	"info": {
+		"_postman_id": "6d93a1a0-6b7e-44f1-a904-782b291232e0",
+		"name": "microgo",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "14364525"
+	},
+	"item": [
+		{
+			"name": "login: ✅ Success",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"// Extracts the auth token from the response headers\r",
+							"pm.test(\"Save auth header token to variable\", function () {\r",
+							"    var jsonData = pm.response.json();\r",
+							"    var authToken = jsonData.token;\r",
+							"    pm.globals.set(\"token\", authToken);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "basic",
+					"basic": [
+						{
+							"key": "password",
+							"value": "Mập khùng",
+							"type": "string"
+						},
+						{
+							"key": "username",
+							"value": "Mập",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"url": {
+					"raw": "localhost:5000/login",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"login"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "upload: ✅ Success",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "data",
+							"type": "file",
+							"src": "postman-cloud:///1eea397f-e686-4df0-ad6f-e428e7807270"
+						}
+					]
+				},
+				"url": {
+					"raw": "localhost:5000/upload",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"upload"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "download: ✅ Success",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"fs_id\": \"658a3d4b42f4d5ee6c25103c\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:5000/download",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"download"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "img_collection: ✅ Success",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:5000/img_collection",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"img_collection"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "index",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:5000/",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						""
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
+```

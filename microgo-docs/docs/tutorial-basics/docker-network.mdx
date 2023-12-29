@@ -1,0 +1,31 @@
+# Docker networking
+
+List the network name using the command: `docker network ls`
+
+![List docker network](/img/docker-network-ls.png)
+
+Scope `local` means that the IP address of the network can only be referred by namespaces inside of Docker. 
+When develop an application that not hosted by a container, you must explicitly specify the IP address of each container
+
+## Host network
+
+Host network is the closest development experience. We install a bunch of software using containers, and refer to them as `localhost`.
+Every port open in the application will be open directly to Docker. There is no fuse going on in terms of networking. 
+This could mean that conflicted port maybe arises when multiple application try to open the same port
+![Host networking](/img/docker-network-host.png)
+
+To implement host networking in `docker-compose.yml`
+
+```yml title="docker-compose.yml"
+services:
+  mongodb:
+    image: mongo:4.4.18
+// highlight-start
+    network_mode: host
+// highlight-end
+  mariadb:
+    image: mariadb:latest
+// highlight-start
+    network_mode: host
+// highlight-end
+```

@@ -1,0 +1,52 @@
+---
+sidebar_position: 3
+---
+
+# Code explain
+
+## Databases
+
+Databases will be create by docker composes. Both databases will using host network (so that the Flask server can connect via `localhost`)
+
+We will utilize the `docker-entrypoint-initdb.d` to create the databases, tables and collections of the two databases. This seeding is placed in [bootstrap folder](https://github.com/highlander-spirou/microgo/tree/2_Celery_worker/bootstrap).
+In production, this will be created seperately, since this contains confidential data like access user and access password.
+
+In [docker-compose.yml](https://github.com/highlander-spirou/microgo/blob/2_Celery_worker/docker-compose.yml), 
+we utilize the `.env` file to manage secrets. Review the [.env.example](https://github.com/highlander-spirou/microgo/blob/2_Celery_worker/celery-app/.env.example)
+for the keys required. 
+
+We also specify the `network_mode` to be `host` so that the IP address of the containers will be mapped directly to docker's localhost.
+More about docker networking visit **[Docker networking](http://localhost:3000/docs/tutorial-basics/docker-network)**
+
+## Monolith server
+
+### Coding style
+
+The web framework is written in `Flask`, and the image processing use `PIL`. The project is managed by `Poetry`.
+
+Flask application will be written in `controller` style:
+
+- `lib`: Include reusable code (JWT, access to MongoDB, errors, ...). This file will be installed as global dependency by `Poetry`
+- `controllers`: Contains the main logic of the routes. Controller responsibility is to execute the logic and return either Data or Error class with appropriate message
+- `index.py`: Route declaration and JSON response (message from controller and status code)
+- `wsgi.py`: Import `app` from `index.py`
+- `config.py`: Global variables and environment variables
+- `instantiation.py`: Instantiate lib's class with config from `config.py`
+
+Poetry will create a symlink between the `lib` folder to the global `site-packages` in the environment. To install the modules from `lib` folder with poetry, includes
+
+```toml title="pyproject.toml"
+[tool.poetry]
+...
+packages = [
+    { include = "auth", from="lib" },
+    { include = "errors", from="lib" },
+    { include = "file_access", from="lib" },
+
+]
+```
+
+
+
+
+
