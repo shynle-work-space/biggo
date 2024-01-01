@@ -2,8 +2,21 @@ from flask import Flask, request, make_response, send_file
 from instantiation import authenticator
 from errors import Error
 from controllers import authentication, upload_controller, download_controller
-from instantiation import file_access
+from instantiation import file_access, app_log, flask_id, hostname
+import logging
+
 app = Flask(__name__)
+logging.basicConfig(level=logging.INFO)
+
+app_log(f'Server {flask_id} start properly on host {hostname}', 'info', tag='server start')
+
+def log_route_name(app):
+    @app.before_request
+    def log_route():
+        app_log(f'[{hostname}] [{flask_id}]: {request.method} on route `{request.path}`', 'info', tag='route access')
+
+    return app
+app = log_route_name(app)
 
 @app.route('/')
 def index():
@@ -65,3 +78,7 @@ def img_collection():
 
     fs_id_list = file_access.list_imgs(signature)
     return fs_id_list
+
+
+if __name__ == '__main__':
+    app.run("0.0.0.0", port=5000, debug=True)

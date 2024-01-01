@@ -6,6 +6,10 @@ from dataclasses import dataclass
 from errors import Error, ConnectionFailure
 from typing import TypedDict
 from datetime import datetime
+from config import config
+from log import ModuleLog
+
+log = ModuleLog()
 
 class Metadict(TypedDict):
     id: str
@@ -17,22 +21,20 @@ class Metadict(TypedDict):
 
 @dataclass
 class FileAccess:
-    config: dict
 
     def __post_init__(self):
-        username = self.config.get('access_usr')
-        pwd = self.config.get('access_pwd')
+        username = config.get('access_usr')
+        pwd = config.get('access_pwd')
 
-        mongo_host = self.config.get('mongo_host')
-        mongo_port = self.config.get('mongo_port')
+        mongo_host = config.get('mongo_host')
+        mongo_port = config.get('mongo_port')
 
         try:
-            print('Connect to MongoDB ...') 
             client = MongoClient(f'mongodb://{username}:{pwd}@{mongo_host}:{mongo_port}?authSource=admin', serverSelectionTimeoutMS=5000)
             self.db = client['image_records']
             self.fs = GridFS(self.db)
         except ConnectionFailure:
-            print('Cannot connect to MongoDB, closing server')
+            log('Cannot connect to MongoDB, closing server ...', level='critical', tag='db error')
             exit()
         client = MongoClient(f'mongodb://{username}:{pwd}@{mongo_host}:{mongo_port}?authSource=admin')
 
@@ -43,7 +45,7 @@ class FileAccess:
             fs_id = self.fs.put(f, owner_id=owner_id, filename=filename, **kwargs)
             return str(fs_id)
         except Exception as e:
-            print(str(e))
+            log(f'Error from create_fs: \n{str(e)}', level='critical', tag='file_access error')
             return Error('fs_error', 'Cannot upload file to MongoDB')
 
 
@@ -55,7 +57,7 @@ class FileAccess:
             f = self.fs.get(ObjectId(fs_id))
             return f.filename, f.read()
         except Exception as e:
-            print(str(e))
+            log(f'Error from read_fs: \n{str(e)}', level='critical', tag='file_access error')
             return Error('fs_error', 'File does not existed')
 
 
@@ -63,7 +65,7 @@ class FileAccess:
         try:
             self.fs.delete(ObjectId(fs_id))
         except Exception as e:
-            print(str(e))
+            log(f'Error from delete_fs: \n{str(e)}', level='critical', tag='file_access error')
             return Error('fs_error', 'Cannot delete file')
 
 

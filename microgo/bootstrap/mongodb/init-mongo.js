@@ -10,15 +10,20 @@ var adminUser = {
             role: 'readWrite',
             db: 'celery',
         },
+        {
+            role: 'readWrite',
+            db: 'log',
+        },
 
     ],
 }
 
 var adminDb = db.getSiblingDB('admin');
-
 adminDb.createUser(adminUser);
 
-db.getSiblingDB('admin').auth(adminUser.user, adminUser.pwd);
+// db.getSiblingDB('admin').auth(adminUser.user, adminUser.pwd);
+imgDb = new Mongo().getDB("image_records");
+imgDb.createCollection('images', { capped: false });
 
-db = new Mongo().getDB("image_records");
-db.createCollection('images', { capped: false });
+logDb = new Mongo().getDB("log");
+logDb.createCollection('logs', { capped: false });

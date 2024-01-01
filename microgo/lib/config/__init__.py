@@ -2,16 +2,22 @@ from os import environ
 from dotenv import load_dotenv
 from typing import TypedDict
 
-load_dotenv()
+if environ.get('RUN_MODE') == 'development':
+    load_dotenv('./.env')
 
 class Config(TypedDict):
     run_mode: str
+    jwt_secret:str
+
     access_usr:str
     access_pwd:str
+    
     mariadb_host:str
     mariadb_port:str
     authdb:str
-    jwt_secret:str
+    
+    mongo_host:str
+    mongo_port:str
 
 config:Config = {
     'run_mode': environ.get('RUN_MODE'),
@@ -32,5 +38,3 @@ config:Config = {
     
 
 }
-
-print(config)
