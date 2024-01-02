@@ -21,7 +21,7 @@ The user data is stored in MariaDB, and images are stored in MongoDB by GridFS. 
 
 - User authentication by JWT
 - Message queue for optimistic feedback
-
+- Image compression using `PIL`
 
 ## Project Overview
 

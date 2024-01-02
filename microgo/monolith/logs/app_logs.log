@@ -1,0 +1,6 @@
+[2024-01-02 20:13:36] [INFO] [LETPC] [361461948] [route access] 127.0.0.1 make a GET request on route `/login`
+[2024-01-02 20:13:39] [INFO] [LETPC] [361461948] [route access] 127.0.0.1 make a POST request on route `/upload`
+[2024-01-02 20:13:39] [INFO] [LETPC] [361461948] [img process] Begin process `65940c03bbf83661a63bea1a`
+[2024-01-02 20:13:44] [INFO] [LETPC] [361461948] [img process] Complete processing `65940c03bbf83661a63bea1a`
+[2024-01-02 20:13:44] [INFO] [LETPC] [361461948] [route access] 127.0.0.1 make a POST request on route `/download`
+[2024-01-02 20:13:44] [INFO] [LETPC] [361461948] [route access] 127.0.0.1 make a GET request on route `/img_collection`

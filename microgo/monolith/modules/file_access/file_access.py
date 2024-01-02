@@ -22,14 +22,13 @@ class Metadict(TypedDict):
 
 @dataclass
 class FileAccess:
-    config: dict
 
     def __post_init__(self):
-        username = self.config.get('access_usr')
-        pwd = self.config.get('access_pwd')
+        username = config.get('access_usr')
+        pwd = config.get('access_pwd')
 
-        mongo_host = self.config.get('mongo_host')
-        mongo_port = self.config.get('mongo_port')
+        mongo_host = config.get('mongo_host')
+        mongo_port = config.get('mongo_port')
 
         try:
             print('Connect to MongoDB ...') 
