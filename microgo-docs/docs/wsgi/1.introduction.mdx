@@ -1,0 +1,24 @@
+---
+sidebar_position: 1
+---
+
+# Code Overview
+
+![Flask warning](/img/flask-warning.png)
+
+Flask development server is built on Werkzeug, which is limited and tied to a single proccess. 
+To be able to run Flask concurrently (and efficiently), we implement a `Gunicorn` wsgi server, that can scale Flask upto *(2\*CPU)+1* times.
+
+#### But there comes a problem !!!
+
+In development, we have absolute control of the server. If we scale the server up (3 times perhaps), now the identifying, debuging (or maybe descaling) becomes much harder.
+Here comes ⭐**Logging**⭐
+
+## Python logging
+
+Some say writing log is the different between a developer and a good developer, and I agree 😎. Log is tedious, and we spend lots of times to maintain (the same as testing),
+however, writing log is the shield protecting our application from being a total melt down. Especially in a distributed system (as we are plan to build), 
+we want to log as much as possible to identify bottleneck, problems and how to tackle them.
+
+Python already have a quite good module for simple logging. For more information check out the tutorial: [Python logging module](/docs/tutorial-basics/python-logging).
+Here, we just walkthrough the changes in the codebase

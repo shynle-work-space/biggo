@@ -31,7 +31,6 @@ class FileAccess:
         mongo_port = config.get('mongo_port')
 
         try:
-            print('Connect to MongoDB ...') 
             client = MongoClient(f'mongodb://{username}:{pwd}@{mongo_host}:{mongo_port}?authSource=admin', serverSelectionTimeoutMS=5000)
             self.db = client['image_records']
             self.fs = GridFS(self.db)

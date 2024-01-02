@@ -29,7 +29,6 @@ class UserAuthentication:
 
     def test_mariadb_connection(self):
         try:
-            print('Connect to MariaDB ...')
             connection = self.engine.connect()
             connection.close()
         except DatabaseError:

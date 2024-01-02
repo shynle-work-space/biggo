@@ -17,4 +17,4 @@ def upload_controller(owner_id:str, request):
         app_log(f'Fail to process `{fs_id}`', 'info', 'img process')
     app_log(f'Complete processing `{fs_id}`', 'info', 'img process')
     # task_producer.dispatch_img_task(fs_id=fs_id, owner_id=owner_id)
-    return fs_id
+    return process_result

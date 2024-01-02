@@ -76,3 +76,7 @@ def img_collection():
 
     fs_id_list = file_access.list_imgs(signature)
     return fs_id_list
+
+
+if __name__ == '__main__':
+    app.run("0.0.0.0", port=5000, debug=True)
