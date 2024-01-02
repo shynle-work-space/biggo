@@ -5,12 +5,7 @@ from typing import TypedDict
 load_dotenv()
 
 class Config(TypedDict):
-<<<<<<<< HEAD:microgo/monolith/config.py
-    run_mode: str
-========
     jwt_secret:str
-
->>>>>>>> 8e7783f (feat: Remove log to mongodb):microgo/monolith/modules/config/__init__.py
     access_usr:str
     access_pwd:str
     mariadb_host:str

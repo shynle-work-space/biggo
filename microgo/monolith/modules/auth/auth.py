@@ -1,13 +1,18 @@
 import jwt
 from datetime import datetime, timedelta
-from sqlalchemy import create_engine, text
 from dataclasses import dataclass
-from errors import Error, DatabaseError 
+
+from sqlalchemy import create_engine, text
+from sqlalchemy.exc import DatabaseError
+
 from typing import TypedDict
 
+from modules.config import config
+from modules.errors import Error
 
 class JWTPayload(TypedDict):
     id:str
+
 
 @dataclass
 class UserAuthentication:
@@ -21,13 +26,15 @@ class UserAuthentication:
         authdb = self.config.get('authdb')
         uri = f"mysql+mysqlconnector://{username}:{password}@{host}:{port}/{authdb}"
         self.engine = create_engine(uri)
+
+
+    def test_mariadb_connection(self):
         try:
             print('Connect to MariaDB ...')
             connection = self.engine.connect()
             connection.close()
         except DatabaseError:
-            print('Cannot connect to MariaDB, closing the server ...')
-            exit()
+            return 'error'
 
 
     def get_user(self, username:str, pwd:str):

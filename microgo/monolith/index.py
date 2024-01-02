@@ -1,16 +1,31 @@
 from flask import Flask, request, make_response, send_file
-from instantiation import authenticator
-from errors import Error
-from controllers import authentication, upload_controller, download_controller
-from instantiation import file_access
+import logging
+
+from instantiation import app_log, authenticator, file_access
+
+from modules.errors import Error
+from middleware.authenticate_route import authentication
+from controllers import upload_controller, download_controller
+
 app = Flask(__name__)
+logging.basicConfig(level=logging.INFO)
+
+
+
+
+def log_route_name(app):
+    @app.before_request
+    def log_route():
+        app_log(f'{request.remote_addr} make a {request.method} request on route `{request.path}`', 'info', tag='route access')
+
+    return app
+app = log_route_name(app)
 
 @app.route('/')
 def index():
     return 'hello world', 200
 
-
-@app.route('/login', methods=['POST'])
+@app.route('/login')
 def login():
     if not request.authorization:
         return {"message": "Authorization header not found"}, 401
@@ -27,24 +42,20 @@ def login():
 
     return resp
 
-
 @app.route('/upload', methods=['POST'])
 def upload_ctrl():
-    signature = authentication(request)
+    signature = authentication(request, authenticator)
     if isinstance(signature, Error):
         return signature.message, 400
     
-    f = request.files['data']
-    fs_id = upload_controller(signature, f)
+    fs_id = upload_controller(signature, request)
     if isinstance(fs_id, Error):
         return fs_id.message, 500
-    return {'fs_id': fs_id}
-
-
+    return {'fs_id': fs_id}, 201
 
 @app.route('/download', methods=['POST'])
 def download_ctrl():
-    signature = authentication(request)
+    signature = authentication(request, authenticator)
     if isinstance(signature, Error):
         return signature.message, 400
     fs_id = request.get_json().get('fs_id')
@@ -59,7 +70,7 @@ def download_ctrl():
 
 @app.route('/img_collection', methods=['GET'])
 def img_collection():
-    signature = authentication(request)
+    signature = authentication(request, authenticator)
     if isinstance(signature, Error):
         return signature.message, 400
 

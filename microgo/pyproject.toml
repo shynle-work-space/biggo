@@ -4,12 +4,6 @@ version = "0.1.0"
 description = ""
 authors = ["highlander-spirou <highlandetspirou2812@gmail.com>"]
 readme = "README.md"
-packages = [
-    { include = "auth", from="lib" },
-    { include = "errors", from="lib" },
-    { include = "file_access", from="lib" },
-
-]
 
 [tool.poetry.dependencies]
 python = "^3.10"
@@ -19,6 +13,12 @@ pyjwt = "^2.8.0"
 sqlalchemy = "^2.0.24"
 mysql-connector-python = "^8.2.0"
 pymongo = "^4.6.1"
+pytz = "^2023.3.post1"
+gunicorn = "^21.2.0"
+pillow = "^10.1.0"
+httpx = "^0.26.0"
+pytest = "^7.4.4"
+pytest-asyncio = "^0.23.3"
 
 
 [build-system]
