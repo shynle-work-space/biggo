@@ -1,32 +1,38 @@
 import jwt
 from datetime import datetime, timedelta
-from sqlalchemy import create_engine, text
 from dataclasses import dataclass
-from errors import Error, DatabaseError 
+
+from sqlalchemy import create_engine, text
+from sqlalchemy.exc import DatabaseError
+
 from typing import TypedDict
-from config import config
+
+from modules.config import config
+from modules.errors import Error
 
 class JWTPayload(TypedDict):
     id:str
 
+
 @dataclass
 class UserAuthentication:
-    config: dict
 
     def __post_init__(self):
-        username = self.config.get('access_usr')
-        password = self.config.get('access_pwd')
-        host = self.config.get('mariadb_host')
-        port = self.config.get('mariadb_port')
-        authdb = self.config.get('authdb')
+        username = config.get('access_usr')
+        password = config.get('access_pwd')
+        host = config.get('mariadb_host')
+        port = config.get('mariadb_port')
+        authdb = config.get('authdb')
         uri = f"mysql+mysqlconnector://{username}:{password}@{host}:{port}/{authdb}"
         self.engine = create_engine(uri)
+
+
+    def test_mariadb_connection(self):
         try:
             connection = self.engine.connect()
             connection.close()
         except DatabaseError:
-            print('Cannot connect to MariaDB, closing the server ...')
-            exit()
+            return 'error'
 
 
     def get_user(self, username:str, pwd:str):
@@ -51,11 +57,11 @@ class UserAuthentication:
         result = self.get_user(username, pwd)
         if result is None:
             return Error('auth_error', 'User information mismatch')
-        return self.createJWT(result[0], self.config.get('jwt_secret'))
+        return self.createJWT(result[0], config.get('jwt_secret'))
     
     def validate_signature(self, sig:str):
         try:
-            decoded:JWTPayload = jwt.decode(sig, self.config.get("jwt_secret"), algorithms=["HS256"])
+            decoded:JWTPayload = jwt.decode(sig, config.get("jwt_secret"), algorithms=["HS256"])
             return decoded
         except Exception:
             return Error('auth_error', 'Failed to validate token, please login again')

@@ -6,7 +6,6 @@ if environ.get('RUN_MODE') == 'development':
     load_dotenv('./.env')
 
 class Config(TypedDict):
-    run_mode: str
     jwt_secret:str
 
     access_usr:str
@@ -20,7 +19,6 @@ class Config(TypedDict):
     mongo_port:str
 
 config:Config = {
-    'run_mode': environ.get('RUN_MODE'),
     'jwt_secret': environ.get('JWT_SECRET'),
 
     'access_usr': environ.get('ACCESS_USR'),

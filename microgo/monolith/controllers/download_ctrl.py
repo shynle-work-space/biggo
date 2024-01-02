@@ -1,5 +1,5 @@
 from instantiation import file_access
-from errors import Error
+from modules.errors import Error
 from io import BytesIO
 
 

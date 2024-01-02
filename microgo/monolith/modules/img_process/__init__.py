@@ -1,5 +1,5 @@
-from file_access import FileAccess
-from errors import Error
+from modules.file_access import FileAccess
+from modules.errors import Error
 from io import BytesIO
 from PIL import Image
 from time import sleep

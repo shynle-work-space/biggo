@@ -17,7 +17,7 @@ services:
     networks:
       - microgo
     volumes:
-      - ./logs:/app/monolith/logs
+      - ./monolith/logs:/app/monolith/logs
 
   nginx:
     image: nginx:latest

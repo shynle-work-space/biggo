@@ -1,8 +1,7 @@
-from errors import Error
-from instantiation import authenticator
+from modules.errors import Error
 
 
-def authentication(req) -> str | Error:
+def authentication(req, authenticator) -> str | Error:
     """
     This function acts as a middleware for all private routes.
 

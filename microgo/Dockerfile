@@ -3,13 +3,12 @@ RUN pip install poetry==1.7.1
 
 WORKDIR /app
 
-COPY pyproject.toml poetry.lock ./
+COPY pyproject.toml poetry.lock README.md ./
 COPY monolith ./monolith
-COPY lib ./lib
-RUN touch README.md
+# COPY lib ./lib
 
 RUN poetry config virtualenvs.create false
-RUN poetry install
+RUN poetry install --no-root
 
 WORKDIR /app/monolith
 
