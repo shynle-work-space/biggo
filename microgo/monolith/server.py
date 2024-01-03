@@ -11,8 +11,6 @@ app = Flask(__name__)
 logging.basicConfig(level=logging.INFO)
 
 
-
-
 def log_route_name(app):
     @app.before_request
     def log_route():

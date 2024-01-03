@@ -1,8 +1,0 @@
-{
-  "label": "2. WSGI server",
-  "position": 4,
-  "link": {
-    "type": "generated-index",
-    "description": "Implement WSGI to run multiple flask instances concurrently"
-  }
-}

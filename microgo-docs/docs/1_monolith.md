@@ -1,12 +1,15 @@
 ---
 sidebar_position: 3
+sidebar_label: "1. Monolith server"
 ---
 
 The repository for this section is located at branch **[1_Monolith_architecture](https://github.com/highlander-spirou/microgo/tree/1_Monolith_architecture)**
 
-# Brief explanation
+# The starting point
 
-We will start with a very simple Flask application, that we will normally see in a Youtube tutorial
+We will start with a very simple Flask application, that we normally see in most Youtube tutorials. 
+
+The Flask app contains 4 routes that is registered at `index.py`. Simple & straightfoward route logic are baked into the `index.py` while the complicated ones are separated into `controllers`. Reusable codes are placed at `modules` (or `libs`, `utils`, ..., whatever you please) and `middlewares` (reusable code applied directly to the `request` object)
 
 ## Directory tree:
 
