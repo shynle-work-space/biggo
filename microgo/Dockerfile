@@ -5,10 +5,10 @@ WORKDIR /app
 
 COPY pyproject.toml poetry.lock README.md ./
 COPY monolith ./monolith
-# COPY lib ./lib
+COPY microgo ./microgo
 
 RUN poetry config virtualenvs.create false
-RUN poetry install --no-root
+RUN poetry install 
 
 WORKDIR /app/monolith
 

@@ -1,4 +1,4 @@
-from modules.file_access import FileAccess
+from instantiation import file_access
 from modules.errors import Error
 from io import BytesIO
 from PIL import Image
@@ -6,7 +6,7 @@ from time import sleep
 
 def compress_img(fs_id: str, owner_id:str):
     # read original image from database
-    read_result = FileAccess().read_fs(fs_id)
+    read_result = file_access.read_fs(fs_id)
     if isinstance(read_result, Error):
         return read_result
     
@@ -24,5 +24,5 @@ def compress_img(fs_id: str, owner_id:str):
         compressed_img_bytes = compressed_img.getvalue()
 
     # Save the bytes to database
-    compressed_id = FileAccess().create_fs(owner_id, compressed_img_bytes, filename=fs_name, tag='compressed', original=fs_id)
+    compressed_id = file_access.create_fs(owner_id, compressed_img_bytes, filename=fs_name, tag='compressed', original=fs_id)
     return compressed_id

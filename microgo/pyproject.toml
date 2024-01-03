@@ -4,6 +4,9 @@ version = "0.1.0"
 description = ""
 authors = ["highlander-spirou <highlandetspirou2812@gmail.com>"]
 readme = "README.md"
+packages = [
+    { include = "microgo" },
+]
 
 
 [tool.poetry.dependencies]
