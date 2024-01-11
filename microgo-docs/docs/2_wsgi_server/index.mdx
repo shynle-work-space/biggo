@@ -5,30 +5,29 @@ sidebar_label: "2. WSGI server"
 
 The repository for this section is located at branch **[2.2_three_way_merge](https://github.com/highlander-spirou/microgo/tree/1_Monolith_architecture)**
 
-This section aim to scale the web using traditional `nginx` and `wsgi` that create multiple web workers (flask instance) rather than just one flask. For detail explaination about `nginx` & `gunicorn wsgi` visit: **[WSGI & Nginx explain](/docs/tutorial-basics/wsgi-and-nginx)**.
+# The Problem
 
-## Bridge network
+To be honest, our website sucks. With a constant five seconds throttle, each request tooks 5s to complete!!! On top of that, the second user have to stuck for 5s to wait for the server to process the `upload` route of the first user (eventhough the second user may not be using the `upload` route after all 🤷‍♂️)
 
-Greatest changes come from the networking setup. In the previous setup, we exposes all of our app to `host` network. But in this section, we will construct an internal bridge network (See **[Docker networking](/docs/tutorial-basics/docker-network)** for more info 👀)
+We will fix this problem by cale the Flask instances. After all, the sole purpose of `microservices` architect is to scale. However, we will use the traditional method: `nginx` and `wsgi`. Instead of having one Flask application to process one request, we will use `gunicorn's wsgi` to spin up multiple Flask instances (under the same local IPs) and using `nginx` to route multiple `gunicorn` containers to the user. 
 
-The bridge network helps:
-- Bridge network maps the container's IP to a route table. This helps multiple containers to open to the same port
-- Keep track of scaled services since Docker will assign the services to a range of IPs 
+<div style={{textAlign: "center"}}>
+    <img src="/img/wsgi_nginx.png" style={{width: "400px", height: "250px"}}></img>
+</div>
+<!-- ![nginx wsgi diagram](/img/wsgi_nginx.png) -->
 
-### Change the host name
-The first change need to be done when migrating from host network to bridge network is the change from `localhost` -> `<service name>` 
+By this way, eventhough we still have to stuck for 5s if a user access `upload` route, we will have other Flask instance to spare 😎 
 
-```md title="monolith/.env"
-...
+For detail explaination about `nginx` & `gunicorn wsgi` visit: **[WSGI & Nginx explain](/docs/tutorial-basics/wsgi-and-nginx)**.
 
-MARIADB_HOST="mariadb"
-MONGO_HOST= "mongodb"
+**Let's learn about the changes in the following page 👇**
 
-...
-```
-### `wait-for-it` service
+**[1. Network change](/docs/wsgi_server/bridge-network)** - Change from *host* network to *bridge* network 
 
-Since our composes use database as a service, we have to wait for the TCP port open on both MariaDB and MongoDB, we will use the `wait-for-it` container. See **[Dependent services](/docs/tutorial-basics/dependent-service)** for more information.
+**[2. Gunicorn](/docs/wsgi_server/gunicorn)** - Implement of `gunicorn`
+
+
+
 
 ## Gunicorn WSGI interface:
 

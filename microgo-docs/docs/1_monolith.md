@@ -63,9 +63,12 @@ The Flask app contains 4 routes that is registered at `index.py`. Simple & strai
 
 ## Databases
 
-The two databases will be declared in the `docker-compose.yml`. Here, we state that the two database will be registered to `host` network, so that the server could refer to their IP address as `localhost`.
+We will use 2 databases for the starter project, just for sake of adding complexity to the application. 
 
-We will utilize the `docker-entrypoint-initdb.d` to finalize the desired state the databases (including create access users, create tables, collections and seeded data). In production environment, this folder with be RIGHT BEFORE BUILD TIME since this contains confidential data.
+`MariaDB` will be used to store user data, while other will be store in the `MongoDB` databases.
+To store the upload images, we will utilize the GridFS modules of `MongoDB`.
+
+The two databases will be created in the `docker-compose.yml`. Here, we state that the two database will be registered to `host` network, so that the server could refer to their IP address as `localhost`.
 
 :::tip
 
@@ -73,10 +76,12 @@ More about Docker networking see **[Docker networking tutorial](/docs/tutorial-b
 
 :::
 
+We will utilize the `docker-entrypoint-initdb.d` to finalize the desired state the databases (including create access users, create tables, collections and seeded data). These files with be found in the `bootstrap` folder. In production environment, this folder with available **ONLY RIGHT BEFORE BUILD TIME** since it contains top-most confidential data.
+
 
 ## The monolith server
 
-To mimic a crowded website, the image process function will be throttled for 5s. Eventhough the entry file is called `wsgi.py`, we will run a bare Flask development server without any WSGI interface
+To mimic a crowded website, the image process function will be throttled for 5s. We will run a bare Flask development server without any WSGI interface (Just like most youtube tutorials)
 
 Run this command 👇
 

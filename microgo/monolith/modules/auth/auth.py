@@ -8,7 +8,7 @@ from sqlalchemy.exc import DatabaseError
 from typing import TypedDict
 
 from modules.config import config
-from modules.errors import Error
+from microgo.errors import Error
 
 class JWTPayload(TypedDict):
     id:str

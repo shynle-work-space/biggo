@@ -1,4 +1,4 @@
-from modules.errors import Error
+from microgo.errors import Error
 
 
 def authentication(req, authenticator) -> str | Error:

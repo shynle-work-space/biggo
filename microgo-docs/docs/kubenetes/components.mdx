@@ -1,0 +1,33 @@
+# Kubernetes components
+
+## Nodes
+
+![k8s cluster on GCP](/img/gcp_k8s.png)
+
+In k8s, **nodes are computers**. When deploying kubernetes, we always have at least two linux servers that installed k8s components - that is the master node(s) and worker node(s).
+
+The worker node is installed with the container runtime (`podman` or `docker`). Master node contains `etcd` and have the responsible to monitor the worker node's pods (we will learn about nodes and pod later).
+
+While node is the physical properties of the k8s, as a developer, this component is neglect. Developers **DOES NOT** interact with the node, and have very limited controlled over the actual nodes.
+
+
+## Cluster
+
+Multiple nodes form a cluster. However, in developer's point of view, we don't see cluster as collection of nodes. We see a cluster is a docker-compose with two services: a `master` service and a `worker` services.
+
+Assume we deploy five GCE computers to GKE - one master and four worker. Each GCE has 1 CPU and 2GB RAM. As developer's view, we have two computers: a master computer with 1CPU ad 2GB RAM, and a worker computer with 4CPU and 8GB of RAM.
+
+![dev pov](/img/dev-pov.png)
+
+This abstraction helps developer to neglect the complexity of setting and scaling the application, but to only cares about the capacity and availability request-wise.
+
+
+## Pods
+
+**Pods are applications**. When the developer develop an application, it containerizes into image. Then the developer deploys the containers to the k8s cluster (*again, all interactions .with k8s must through ymls and `kubectl`*). In a sequence of `kubectl` -> `master node` -> `worker node`, the worker download the image from the hub, and run the container in a container runtime (*OCI-compliance*, either podman or docker) 
+
+Developer scales their own application horizontally (by duplicating their application) and vertically (by specify the resource capacity). However, the resource capacity **MUST NOT** exceed the capacity of a single node (*well, since application runs on nodes, not cluster, obviously 🤷‍♂️*)
+
+The deployment of pods are held in **`development.yml`**
+
+![dev-container-k8s](/img/dev-container.png)

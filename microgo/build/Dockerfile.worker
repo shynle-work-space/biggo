@@ -1,0 +1,14 @@
+# Stage 1: Build Golang application
+FROM orchestrator AS build
+
+# Stage 2
+FROM python-base-img
+WORKDIR /app
+
+COPY worker ./worker
+# Copy the binary from the first stage into the second stage
+COPY --from=build /bin/orchestrator ./worker/orchestrator
+
+WORKDIR /app/worker
+RUN chmod +x ./run_worker.sh
+ENTRYPOINT ["sh", "./run_worker.sh"]

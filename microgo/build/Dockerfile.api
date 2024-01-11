@@ -1,0 +1,18 @@
+# Stage 1: Build Golang application
+FROM orchestrator AS build
+
+
+# Stage 2
+FROM python-base-img
+WORKDIR /app
+COPY ./monolith ./monolith
+COPY ./microgo ./microgo
+
+# Copy the binary from the first stage into the second stage
+COPY --from=build /bin/orchestrator ./monolith/orchestrator
+
+RUN poetry install --only-root
+
+WORKDIR /app/monolith
+RUN chmod +x ./run_server.sh
+ENTRYPOINT ["sh", "./run_server.sh"]

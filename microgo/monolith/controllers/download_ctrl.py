@@ -1,5 +1,5 @@
 from instantiation import file_access
-from modules.errors import Error
+from microgo.errors import Error
 from io import BytesIO
 
 

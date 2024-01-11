@@ -1,7 +1,7 @@
 from instantiation import file_access
 from modules.img_process import compress_img
 from instantiation import app_log
-from modules.errors import Error
+from microgo.errors import Error
 
 def upload_controller(owner_id:str, request):
     f = request.files.get('data')

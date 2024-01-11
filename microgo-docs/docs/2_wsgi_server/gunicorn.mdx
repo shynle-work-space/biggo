@@ -1,0 +1,52 @@
+# Gunicorn WSGI interface
+
+## Create `gunicorn_config.py`
+
+In the previous application, run the Flask application in dev mode, that is, call the `app.run()`.
+Now we want to run the application using the `Gunicorn` interface. `Gunicorn` can be run with many arguments, but it is simplier to create a `gunicorn_config.py` to manage the `gunicorn wsgi`
+
+:::note
+
+We renamed the `index.py` to `server.py` just for some clarification
+
+:::
+
+- Some key arguments in the gunicorn config:
+
+1. `bind = '0.0.0.0:5000'`: Make sure the gunicorn server is open to any IPs. This is important, especially when deploying to a distributed environment like docker, k8s. We also want the gunicorn to open a port `5000` to the local IPs. 
+
+2. `workers = 5`: Number of Flask instances that one gunicorn manage. The rule of thumb that gunicorn suggest is `2*CPU + 1`. Assume that we will have 1 vCPU per each docker container, the number is 3.
+
+:::note
+
+Note that the gunicorns load balancing between flask instances by the availability of CPU. Python are extremely stupid in terms of multiprocessing, so spawn too many flask instance could hurt the 
+performance of individual instances, and the whole container
+:::
+
+3. `worker_connections = 1000`: number of gevents worker. Just leave it to default settings
+
+4. `loglevel = 'info'`: Settings loglevel to info is a great start
+
+## Update the `ENTRYPOINT`
+
+We also update the `ENTRYPOINT` of the image to call the gunicorn service.
+
+```Dockerfile title="Dockerfile"
+...
+
+// highlight-start
+ENTRYPOINT ["poetry", "run", "gunicorn", "-c", "gunicorn_config.py", "server:app"]
+// highlight-end
+```
+
+
+## Mount the `logs` folder
+
+We want to be able to investigate the log, so we mount the `logs` folder into the docker volume. Since the `logging` module default mode is append mode, new log from all the containers will be written into a single `app_logs.log` file, create a central logging point for our distributed service
+
+```yml title="docker-compose.yml"
+services:
+  flask:
+    volumes:
+      - ./monolith/logs:/app/monolith/logs
+```

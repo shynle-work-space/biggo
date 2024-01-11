@@ -1,0 +1,19 @@
+# Bridge network
+
+Greatest changes come from the networking setup. In the previous setup, we exposes all of our app to `host` network. But in this section, we will construct an internal bridge network (See **[Docker networking](/docs/tutorial-basics/docker-network)** for more info 👀)
+
+The bridge network helps:
+- Bridge network maps the container's IP to a route table. This helps multiple containers to open to the same port
+- Keep track of scaled services since Docker will assign the services to a range of IPs 
+
+### Change the host name
+The first change need to be done when migrating from host network to bridge network is the change from `localhost` -> `<service name>` 
+
+```md title="monolith/.env"
+...
+
+MARIADB_HOST="mariadb"
+MONGO_HOST= "mongodb"
+
+...
+```

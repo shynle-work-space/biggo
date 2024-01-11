@@ -1,0 +1,24 @@
+# Kubernetes
+
+![develope k8s](/img/developer-k8s.png)
+
+## Core k8s workflow
+
+1. When setting up `kubectl`, the developers require to connect to a k8s cluster. In minikube, the kubectl is automatically configured. 
+
+:::tip
+
+We can view all the connected k8s with command
+
+```bash
+kubectl config get-contexts
+```
+
+:::
+
+We also can connect `kubectl` with GCP, view **[This tutorial](https://sunitc.dev/2020/12/12/how-to-create-first-kubernetes-cluster-on-google-cloud-and-connect-to-it-from-local-machine-using-kubectl/)**
+
+
+2. K8s developers write *ymls* that describe the desired state of the k8s application (what containers should ran, how networking should works, ...) then apply the changes to `kubectl`
+
+3. `kubectl` send commands to the master node. Base on the desired state, the master node(s) controls the worker node(s) to match the desired statement.

@@ -3,7 +3,7 @@ import logging
 
 from instantiation import app_log, authenticator, file_access
 
-from modules.errors import Error
+from microgo.errors import Error
 from middleware.authenticate_route import authentication
 from controllers import upload_controller, download_controller
 
